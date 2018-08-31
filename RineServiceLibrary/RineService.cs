@@ -204,6 +204,19 @@ namespace Rine.ServiceLibrary
             }
         }
 
+        public void GetInvitations()
+        {
+            IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
+            foreach (var invitation in _user.Invitations)
+            {
+                channel.AddFriendNotify(new FriendInfo
+                {
+                    Uid = invitation.Uid,
+                    UserName = invitation.UserName
+                });
+            }
+        }
+
         private static string CryptoPassword(string password)
         {
             using (MD5 md5 = MD5.Create())

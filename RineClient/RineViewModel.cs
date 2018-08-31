@@ -141,6 +141,7 @@ namespace RineClient
 
         public DateTime LastLogOut { get; set; }
 
+        [XmlIgnore]
         public ObservableCollection<FriendInfo> Invitations;
 
         public int Uid { get; set; }
@@ -222,6 +223,7 @@ namespace RineClient
                 model = new RineViewModel();
             }
             model.Uid = uid;
+            model.Invitations = new ObservableCollection<FriendInfo>();
             return model;
         }
 
@@ -229,6 +231,7 @@ namespace RineClient
         {
             _client = client;
             _client.Receive(LastLogOut);
+            _client.GetInvitations();
         }
 
         public void Save()

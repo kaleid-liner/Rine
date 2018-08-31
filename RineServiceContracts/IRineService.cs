@@ -34,6 +34,9 @@ namespace Rine.ServiceContracts
 
         [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
         void ResponseInvitation(bool consentOrDecline, int srcUid);
+
+        [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
+        void GetInvitations();
     }
 
     [DataContract]

@@ -13,7 +13,7 @@
     </Window.Resources>
     <Grid>
         <Canvas Background="AliceBlue">
-            <ListBox x:Name="InvitationsBox" Canvas.Top="10" Canvas.Left="25" Width="120" Height="60" 
+            <ListBox x:Name="InvitationsBox" Canvas.Top="10" Canvas.Left="25" Width="120" Height="60" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ItemsSource="{Binding Invitations}" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -30,20 +30,21 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Canvas.Left="20" Canvas.Bottom="20" Content="同意" Padding="10, 0" Style="{StaticResource ButtonStyle}" FontSize="15"
+            <Button x:Name="ConsentButton" Canvas.Left="20" Canvas.Bottom="20" Content="同意" Padding="10, 0" Style="{StaticResource ButtonStyle}" FontSize="15"
                     Command="{Binding ResponseCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource parameterConverter}">
                         <Binding ElementName="InvitationsBox" Path="SelectedItem"/>
-                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType=Button}" Path="Content"/>
+                        <Binding ElementName="ConsentButton" Path="Content"/>
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>
-            <Button Canvas.Left="100" Canvas.Bottom="20" Content="拒绝" Padding="10, 0" Style="{StaticResource ButtonStyle}" FontSize="15">
+            <Button x:Name="DeclineButton" Canvas.Left="100" Canvas.Bottom="20" Content="拒绝" Padding="10, 0" 
+                    Style="{StaticResource ButtonStyle}" FontSize="15" Command="{Binding ResponseCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource parameterConverter}">
                         <Binding ElementName="InvitationsBox" Path="SelectedItem"/>
-                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType=Button}" Path="Content"/>
+                        <Binding ElementName="DeclineButton" Path="Content"/>
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>

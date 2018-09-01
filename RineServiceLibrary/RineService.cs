@@ -151,7 +151,6 @@ namespace Rine.ServiceLibrary
         {
             using (var messageDB = new MessageContext())
             {
-                messageDB.Users.Attach(_user);
                 messageDB.Users.Find(friend.Uid).Invitations.Add(_user);
                 messageDB.SaveChanges();
                 if (usersOnline.TryGetValue(friend.Uid, out OperationContext operation))

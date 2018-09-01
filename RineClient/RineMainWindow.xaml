@@ -28,7 +28,7 @@
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
             <Menu Background="LightSkyBlue">
                 <MenuItem Header="账户" Foreground="White">
-                    <MenuItem Header="登出" Foreground="Black" Background="White" Command="{Binding LogOutCommand}"/>
+                    <MenuItem Header="登出" Foreground="Black" Background="White" Command="{Binding LogOutCommand}" />
                 </MenuItem>
                 <MenuItem Header="好友" Foreground="White">
                     <MenuItem Header="添加" Foreground="Black" Background="White" Command="local:RineViewModel.AddFriendCommand"/>

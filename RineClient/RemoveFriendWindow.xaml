@@ -12,7 +12,8 @@
     <Grid>
         <Canvas Background="AliceBlue">
             <ListBox x:Name="FriendListBox" Canvas.Top="10" Canvas.Left="25" Width="120" Height="60" SelectionMode="Single"
-                     ItemsSource="{Binding FriendList}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                     ItemsSource="{Binding FriendList}" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>

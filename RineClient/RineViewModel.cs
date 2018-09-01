@@ -53,18 +53,20 @@ namespace RineClient
         [XmlIgnore]
         public ICommand ResponseCommand
         {
-            get => new RelayCommand<ResponseParameters>(ResponseExecute);
+            get => new RelayCommand<ResponseParameters>(ResponseExecute, ResponseCanExecute);
         }
 
         [XmlIgnore]
         public ICommand VerifyRemoveCommand
         {
-            get => new RelayCommand<User>(RemoveExecute);
+            get => new RelayCommand<User>(RemoveExecute, RemoveCanExecute);
         }
 
 
         private void SendExecute()
         {
+            if (string.IsNullOrEmpty(SendBuffer))
+                return;
             try
             {
                 _client.Send(new MessageInfo
@@ -117,12 +119,31 @@ namespace RineClient
         {
             FriendList.Remove(friend);
         }
+        private bool RemoveCanExecute(User friend)
+        {
+            return friend != null;
+        }
 
         private void ResponseExecute(ResponseParameters parameters)
         {
             FriendInfo invitation = Invitations.First(i => i.Uid == parameters.Uid);
             Invitations.Remove(invitation);
             _client.ResponseInvitation(parameters.ConsentOrDecline, parameters.Uid);
+            if (parameters.ConsentOrDecline == true)
+            {
+                FriendList.Add(new User
+                {
+                    RineID = invitation.Uid,
+                    UserName = invitation.UserName,
+                    Messages = new ObservableCollection<Message>(),
+                    Online = false
+                });
+            }
+        }
+
+        private bool ResponseCanExecute(ResponseParameters parameters)
+        {
+            return parameters.Uid != -1;
         }
 
         private void OnPropertyChanged(string propertyName) 
@@ -142,7 +163,7 @@ namespace RineClient
         public DateTime LastLogOut { get; set; }
 
         [XmlIgnore]
-        public ObservableCollection<FriendInfo> Invitations;
+        public ObservableCollection<FriendInfo> Invitations { get; set; }
 
         public int Uid { get; set; }
 

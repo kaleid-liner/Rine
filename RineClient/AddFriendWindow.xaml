@@ -11,7 +11,7 @@
             <Label Canvas.Left="20" Canvas.Top="30" Content="Rine号" Foreground="Gray"/>
             <TextBox x:Name="RineIDBox" Canvas.Left="80" Canvas.Top="35" Width="70"/>
             <Button Canvas.Left="20" Canvas.Bottom="20" Content="确认" Padding="10, 0" Style="{StaticResource ButtonStyle}" FontSize="15"
-                    Command="{Binding VerifyAddCommand}" CommandParameter="{Binding ElementName=RineIDBox, Path=Text}"/>
+                    Command="{Binding VerifyAddCommand}" CommandParameter="{Binding ElementName=RineIDBox, Path=Text}" Click="VerifyButton_Click"/>
             <Button Canvas.Left="100" Canvas.Bottom="20" Content="取消" Padding="10, 0" Style="{StaticResource ButtonStyle}" FontSize="15" Click="CancelButton_Click"/>
         </Canvas>
         

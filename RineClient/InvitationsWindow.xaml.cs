@@ -40,7 +40,7 @@ namespace RineClient
         {
             return new ResponseParameters
             {
-                Uid = (values[0] as FriendInfo).Uid,
+                Uid = (values[0] as FriendInfo)?.Uid ?? -1, 
                 ConsentOrDecline = (string)values[1] == "同意"
             };
         }

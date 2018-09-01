@@ -29,5 +29,12 @@ namespace RineClient
             this.DialogResult = false;
             this.Close();
         }
+
+        private void VerifyButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            MessageBox.Show("您的好友申请已发出");
+            this.RineIDBox.Text = "";
+        }
     }
 }

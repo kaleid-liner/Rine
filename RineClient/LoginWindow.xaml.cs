@@ -135,6 +135,9 @@ namespace RineClient
             RegisterButton.Content = "前往注册";
             RegisterButton.Click -= VerifyRegister_Click;
             RegisterButton.Click += RegisterButton_Click;
+            LoginButton.Content = "登陆";
+            LoginButton.Click -= ReturnToLogin_Click;
+            LoginButton.Click += LoginButton_Click;
         }
 
         private void RineBox_TextChanged(object sender, TextChangedEventArgs e)

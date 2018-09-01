@@ -129,16 +129,20 @@ namespace Rine.ServiceLibrary
             using (MessageContext messageDB = new MessageContext())
             {
                 messageDB.Database.Connection.Open();
-                Message _message = new Message
+                User dstUser = messageDB.Users.Find(message.DstUid);
+                if (dstUser != null)
                 {
-                    Content = message.Content,
-                    DstUid = message.DstUid,
-                    SrcUid = _user.Uid,
-                    Time = DateTime.Now,
-                };
-                messageDB.Messages.Add(_message);
-                messageDB.Users.Find(message.DstUid).ChatLogs.Add(_message);
-                messageDB.SaveChanges();
+                    Message _message = new Message
+                    {
+                        Content = message.Content,
+                        DstUid = message.DstUid,
+                        SrcUid = _user.Uid,
+                        Time = DateTime.Now,
+                    };
+                    messageDB.Messages.Add(_message);
+                    dstUser.ChatLogs.Add(_message);
+                    messageDB.SaveChanges();
+                }
             }
             if (usersOnline.TryGetValue(message.DstUid, out OperationContext operation))
             {

@@ -129,14 +129,12 @@ namespace Rine.ServiceLibrary
             using (MessageContext messageDB = new MessageContext())
             {
                 messageDB.Database.Connection.Open();
-                int code = messageDB.Messages.Select(m => m.Code).Max() + 1;
                 Message _message = new Message
                 {
                     Content = message.Content,
                     DstUid = message.DstUid,
                     SrcUid = _user.Uid,
                     Time = DateTime.Now,
-                    Code = code
                 };
                 messageDB.Messages.Add(_message);
                 messageDB.Users.Find(message.DstUid).ChatLogs.Add(_message);

@@ -28,10 +28,7 @@ namespace RineClient
         }
 
         [XmlIgnore]
-        public ICommand LogOutCommand
-        {
-            get => new RelayCommand(LogOutExecute);
-        }
+        public static RoutedCommand LogOutCommand = new RoutedCommand("Log out", typeof(RineViewModel));
 
         [XmlIgnore]
         public static RoutedCommand AddFriendCommand = new RoutedCommand("Add friend", typeof(RineViewModel),
@@ -113,7 +110,7 @@ namespace RineClient
             return false;
         }
 
-        private void LogOutExecute()
+        private void DoLogOut()
         {
             LastLogOut = DateTime.Now;
             Save();
@@ -271,7 +268,7 @@ namespace RineClient
 
         public void OnRineMainWindowClosing(object sender, CancelEventArgs args)
         {
-            LogOutExecute();
+            DoLogOut();
         }
     }
 }

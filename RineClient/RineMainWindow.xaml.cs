@@ -49,6 +49,10 @@ namespace RineClient
             {
                 e.CanExecute = true;
             }
+            if (e.Command == RineViewModel.LogOutCommand)
+            {
+                e.CanExecute = true;
+            }
             e.Handled = true;
         }
 
@@ -77,6 +81,12 @@ namespace RineClient
                     DataContext = DataContext
                 };
                 dialog.ShowDialog();
+            }
+            if (e.Command == RineViewModel.LogOutCommand)
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                this.Close();
             }
             e.Handled = true;
         }

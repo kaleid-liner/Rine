@@ -7,15 +7,15 @@
             <local:MessagesLabelConverter x:Key="messagesLabelConverter"/>
             <local:OnlineImageConverter x:Key="onlineImageConverter"/>
         </DataTemplate.Resources>
-        <Grid Width="150" Height="50">
+        <Grid Width="{TemplateBinding Width}" Height="50">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Background="WhiteSmoke">
                 <Image x:Name="Portrait" Source="{Binding Online, Converter={StaticResource onlineImageConverter}}" Stretch="Fill"/>
             </Grid>
-            <StackPanel Grid.Column="1" Orientation="Vertical" Background="WhiteSmoke">
+            <StackPanel Grid.Column="1" Orientation="Vertical" Background="Transparent">
                 <Label HorizontalContentAlignment="Left" FontSize="11"
                    FontWeight="Bold" Height="25">
                     <Label.Content>
@@ -25,7 +25,7 @@
                         </MultiBinding>
                     </Label.Content>
                 </Label>
-                <TextBox Background="WhiteSmoke" Height="25" FontSize="8" Text="{Binding Messages, Converter={StaticResource messagesLabelConverter}}" />
+                <TextBlock Background="Transparent" Height="25" FontSize="8" Text="{Binding Messages, Converter={StaticResource messagesLabelConverter}}" />
             </StackPanel>
         </Grid>
     </DataTemplate>

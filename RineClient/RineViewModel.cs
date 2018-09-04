@@ -24,7 +24,7 @@ namespace RineClient
         [XmlIgnore]
         public ICommand SendCommand
         {
-            get => new RelayCommand(SendExecute);
+            get => new RelayCommand(SendExecute, SendCanExecute);
         }
 
         [XmlIgnore]
@@ -90,6 +90,11 @@ namespace RineClient
             {
                 SendBuffer = "";
             }
+        }
+
+        private bool SendCanExecute()
+        {
+            return CurrentFriend != null;
         }
 
         private void AddExecute(string uid)

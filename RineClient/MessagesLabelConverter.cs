@@ -14,9 +14,10 @@ namespace RineClient
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string message = (value as ObservableCollection<Message>).Last().Content;
-            return message.Length > 20 ? message.Substring(0, 20) + "..." : message;
-
+            string message = (value as ObservableCollection<Message>).LastOrDefault()?.Content;
+            if (message != null)
+                return message.Length > 20 ? message.Substring(0, 20) + "..." : message;
+            else return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

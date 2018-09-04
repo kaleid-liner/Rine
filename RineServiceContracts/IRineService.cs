@@ -42,34 +42,12 @@ namespace Rine.ServiceContracts
     [DataContract]
     public class MessageInfo
     {
-        private int dstUid;
 
         [DataMember]
-        public int DstUid
-        {
-            get => dstUid;
-            set
-            {
-                if (value <= 0)
-                    throw new UidNotValidException(value);
-                else dstUid = value;
-                    
-            }
-        }
-
-        private int srcUid;
+        public int DstUid { get; set; } 
 
         [DataMember]
-        public int SrcUid
-        {
-            get => srcUid;
-            set
-            {
-                if (value <= 0)
-                    throw new UidNotValidException(value);
-                else srcUid = value;
-            }
-        }
+        public int SrcUid { get; set; }
 
         [DataMember]
         public string Content { get; set; }

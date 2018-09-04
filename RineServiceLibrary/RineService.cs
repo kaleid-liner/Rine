@@ -155,6 +155,7 @@ namespace Rine.ServiceLibrary
         {
             using (var messageDB = new MessageContext())
             {
+                messageDB.Users.Attach(_user);
                 messageDB.Users.Find(friend.Uid).Invitations.Add(_user);
                 messageDB.SaveChanges();
                 if (usersOnline.TryGetValue(friend.Uid, out OperationContext operation))
@@ -191,7 +192,6 @@ namespace Rine.ServiceLibrary
                     User friend = messageDB.Users.Find(srcUid);
                     friend.FriendList.Add(_user);
                     _user.FriendList.Add(friend);
-                    messageDB.SaveChanges();
                     if (usersOnline.TryGetValue(srcUid, out OperationContext operation))
                     {
                         operation.GetCallbackChannel<IRineCallBack>().AddFriendSuccess(
@@ -202,9 +202,11 @@ namespace Rine.ServiceLibrary
                             });
                     }
                 }
+                messageDB.SaveChanges();
             }
         }
 
+        [OperationBehavior]
         public void GetInvitations()
         {
             IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();

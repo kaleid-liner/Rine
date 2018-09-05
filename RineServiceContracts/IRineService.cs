@@ -37,6 +37,9 @@ namespace Rine.ServiceContracts
 
         [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
         void GetInvitations();
+
+        [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
+        void GetFriends();
     }
 
     [DataContract]

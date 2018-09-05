@@ -133,13 +133,16 @@ namespace RineClient
             _client.ResponseInvitation(parameters.ConsentOrDecline, parameters.Uid);
             if (parameters.ConsentOrDecline == true)
             {
-                FriendList.Add(new User
+                if (!FriendList.Any(f => f.RineID == parameters.Uid))
                 {
-                    RineID = invitation.Uid,
-                    UserName = invitation.UserName,
-                    Messages = new ObservableCollection<Message>(),
-                    Online = false
-                });
+                    FriendList.Add(new User
+                    {
+                        RineID = invitation.Uid,
+                        UserName = invitation.UserName,
+                        Messages = new ObservableCollection<Message>(),
+                        Online = false
+                    });
+                }
             }
         }
 
@@ -191,13 +194,16 @@ namespace RineClient
 
         public void AddFriendSuccess(FriendInfo friend)
         {
-            FriendList.Add(new User
+            if (!FriendList.Any(f => f.RineID == friend.Uid))
             {
-                Messages = new ObservableCollection<Message>(),
-                Online = true,
-                RineID = friend.Uid,
-                UserName = friend.UserName
-            });
+                FriendList.Add(new User
+                {
+                    Messages = new ObservableCollection<Message>(),
+                    Online = true,
+                    RineID = friend.Uid,
+                    UserName = friend.UserName
+                });
+            }
         }
 
         public void LogInNotify(int uid)
@@ -253,8 +259,9 @@ namespace RineClient
         public void SetServiceChannel(IRineService client)
         {
             _client = client;
-            _client.Receive(LastLogOut);
             _client.GetInvitations();
+            _client.GetFriends();
+            _client.Receive(LastLogOut);
         }
 
         public void Save()

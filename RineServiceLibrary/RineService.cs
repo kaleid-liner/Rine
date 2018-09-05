@@ -220,6 +220,20 @@ namespace Rine.ServiceLibrary
             }
         }
 
+        [OperationBehavior]
+        public void GetFriends()
+        {
+            IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
+            foreach (var friend in _user.FriendList)
+            {
+                channel.AddFriendSuccess(new FriendInfo
+                {
+                    Uid = friend.Uid,
+                    UserName = friend.UserName
+                });
+            }
+        }
+
         private static string CryptoPassword(string password)
         {
             using (MD5 md5 = MD5.Create())

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Rine.ServiceContracts;
 using System.ServiceModel;
+using System.Collections.ObjectModel;
 
 namespace RineClient
 {
@@ -21,7 +22,6 @@ namespace RineClient
     /// </summary>
     public partial class RineMainWindow : Window
     {
-
         public RineMainWindow(RineViewModel rineViewModel)
         {
             InitializeComponent();

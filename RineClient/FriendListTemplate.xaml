@@ -25,7 +25,8 @@
                         </MultiBinding>
                     </Label.Content>
                 </Label>
-                <TextBlock Background="Transparent" Height="25" FontSize="8" Text="{Binding Messages, Converter={StaticResource messagesLabelConverter}}" />
+                <TextBlock Background="Transparent" Height="25" FontSize="13" Padding="5, 0"
+                           Text="{Binding Messages, Converter={StaticResource messagesLabelConverter}}" />
             </StackPanel>
         </Grid>
     </DataTemplate>

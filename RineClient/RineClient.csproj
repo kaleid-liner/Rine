@@ -187,8 +187,9 @@
     <Resource Include="Images\glasses.png" />
     <Resource Include="Images\offline_portrait.png" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Resource Include="Data\4.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

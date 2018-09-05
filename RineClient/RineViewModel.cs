@@ -155,6 +155,8 @@ namespace RineClient
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private User _currentFriend;
+
+        [XmlIgnore]
         public User CurrentFriend
         {
             get => _currentFriend;

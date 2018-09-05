@@ -2,18 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RineClient">
     <DataTemplate x:Key="MessageTemplate">
-        <Grid Width="450" Height="Auto" Background="Transparent" Margin="2">
+        <Grid Width="Auto" Height="Auto" Background="Transparent" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Row="0" Grid.Column="0" FontSize="10" Text="{Binding UserName}" Padding="2" Foreground="Black" />
-            <TextBox Grid.Row="0" Grid.Column="1" FontSize="7" Text="{Binding Time, StringFormat='MM/dd HH:mm:ss'}" Padding="2" Foreground="Gray"/>
-            <TextBox Grid.Row="1" Grid.ColumnSpan="2" FontSize="12" Text="{Binding Content}" Padding="2" Foreground="Blue"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="10" Text="{Binding UserName}" Padding="2" Foreground="Black" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="7" Text="{Binding Time, StringFormat='MM/dd HH:mm:ss'}" 
+                     Padding="2" Foreground="Gray" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontSize="12" Text="{Binding Content}" Padding="2" Foreground="Blue"
+                       TextWrapping="Wrap" MaxWidth="350" HorizontalAlignment="Right"/>
         </Grid>
     </DataTemplate>
 

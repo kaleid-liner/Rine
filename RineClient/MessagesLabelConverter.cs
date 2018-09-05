@@ -16,7 +16,7 @@ namespace RineClient
         {
             string message = (value as ObservableCollection<Message>).LastOrDefault()?.Content;
             if (message != null)
-                return message.Length > 20 ? message.Substring(0, 20) + "..." : message;
+                return message.Length > 10 ? message.Substring(0, 10) + "..." : message;
             else return string.Empty;
         }
 

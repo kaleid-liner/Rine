@@ -17,6 +17,7 @@ namespace RineClient
                 foreach (User item in e.OldItems)
                 {
                     item.Messages.CollectionChanged -= ChildCollectionChanged;
+                    item.PropertyChanged -= ChildPropertyChanged;
                 }
             }
             if (e.NewItems != null)
@@ -24,9 +25,16 @@ namespace RineClient
                 foreach (User item in e.NewItems)
                 {
                     item.Messages.CollectionChanged += ChildCollectionChanged;
+                    item.PropertyChanged += ChildPropertyChanged;
                 }
             }
             base.OnCollectionChanged(e);
+        }
+
+        private void ChildPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            base.OnCollectionChanged(args);
         }
 
         private void ChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -34,5 +42,6 @@ namespace RineClient
             var args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
             base.OnCollectionChanged(args);
         }
+
     }
 }

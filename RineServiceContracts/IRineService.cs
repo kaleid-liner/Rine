@@ -40,6 +40,9 @@ namespace Rine.ServiceContracts
 
         [OperationContract(IsOneWay = true, IsInitiating = false, IsTerminating = false)]
         void GetFriends();
+
+        [OperationContract(IsOneWay = false, IsInitiating = false, IsTerminating = false)]
+        bool GetFriendStatus(int uid);
     }
 
     [DataContract]

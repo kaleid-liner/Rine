@@ -204,7 +204,7 @@ namespace RineClient
                 FriendList.Add(new User
                 {
                     Messages = new ObservableCollection<Message>(),
-                    Online = true,
+                    Online = _client.GetFriendStatus(friend.Uid),
                     RineID = friend.Uid,
                     UserName = friend.UserName
                 });
@@ -267,6 +267,10 @@ namespace RineClient
             _client.GetInvitations();
             _client.GetFriends();
             _client.Receive(LastLogOut);
+            foreach (User friend in FriendList)
+            {
+                friend.Online = _client.GetFriendStatus(friend.RineID);
+            }
         }
 
         public void Save()

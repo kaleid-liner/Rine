@@ -246,6 +246,12 @@ namespace Rine.ServiceLibrary
             }
         }
 
+        [OperationBehavior]
+        public bool GetFriendStatus(int uid)
+        {
+            return usersOnline.ContainsKey(uid);
+        }
+
         private static string CryptoPassword(string password)
         {
             using (MD5 md5 = MD5.Create())

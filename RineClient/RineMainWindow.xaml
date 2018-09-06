@@ -53,7 +53,7 @@
                   ItemContainerStyleSelector="{StaticResource messageStyleSelector}" ItemsSource="{Binding CurrentFriend.Messages}">
         </ListView>
         <TextBox x:Name="SendBuffer" Grid.Column="2" Grid.Row="2" Margin="10" ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                 Text="{Binding SendBuffer}" TextWrapping="Wrap"/>
+                 Text="{Binding SendBuffer}" TextWrapping="Wrap" AcceptsReturn="True"/>
         <Button Grid.Column="2" Grid.Row="3" Margin="10" Content="确认" Padding="5,0,5,0" 
                 FontSize="16" Background="DodgerBlue" Foreground="White" HorizontalAlignment="Right" Command="{Binding SendCommand}"/>
 

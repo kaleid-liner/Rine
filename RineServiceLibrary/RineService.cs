@@ -101,7 +101,8 @@ namespace Rine.ServiceLibrary
                     channel.ReceiveChat(new MessageInfo
                     {
                         Content = message.Content,
-                        SrcUid = message.SrcUid
+                        SrcUid = message.SrcUid,
+                        Time = message.Time
                     });
                 }
             }

@@ -28,6 +28,9 @@ namespace RineClient
         }
 
         [XmlIgnore]
+        public static RoutedCommand LogInCommand = new RoutedCommand("Log in", typeof(RineViewModel));
+
+        [XmlIgnore]
         public static RoutedCommand LogOutCommand = new RoutedCommand("Log out", typeof(RineViewModel));
 
         [XmlIgnore]

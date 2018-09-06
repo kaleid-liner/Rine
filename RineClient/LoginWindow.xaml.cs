@@ -83,13 +83,12 @@ namespace RineClient
             Hint.Content = "请输入任意你偏好的用户名";
             RineBox.Text = "";
             PasswordBox.Password = "";
-            RegisterButton.Content = "注册";
+            RegisterButton.Content = "前往登陆";
             (sender as Button).Click -= RegisterButton_Click;
-            (sender as Button).Click += VerifyRegister_Click;
-            LoginButton.Content = "前往登陆";
-            LoginButton.IsEnabled = true;
+            (sender as Button).Click += ReturnToLogin_Click;
+            LoginButton.Content = "注册";
             LoginButton.Click -= LoginButton_Click;
-            LoginButton.Click += ReturnToLogin_Click;
+            LoginButton.Click += VerifyRegister_Click;
 
         }
 
@@ -133,10 +132,10 @@ namespace RineClient
             RineBox.Text = "";
             PasswordBox.Password = "";
             RegisterButton.Content = "前往注册";
-            RegisterButton.Click -= VerifyRegister_Click;
+            RegisterButton.Click -= ReturnToLogin_Click;
             RegisterButton.Click += RegisterButton_Click;
             LoginButton.Content = "登陆";
-            LoginButton.Click -= ReturnToLogin_Click;
+            LoginButton.Click -= VerifyRegister_Click;
             LoginButton.Click += LoginButton_Click;
         }
 

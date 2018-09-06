@@ -29,8 +29,7 @@ namespace Rine.ServiceLibrary
             using (MessageContext messageDB = new MessageContext())
             {
                 messageDB.Database.Connection.Open();
-                _user = messageDB.Users.Include(u => u.Invitations).Include(u => u.FriendList)
-                    .Include(u => u.ChatLogs).Where(u => u.Uid == user.Uid).FirstOrDefault();
+                _user = messageDB.Users.AsNoTracking().First(u => u.Uid == user.Uid);
                 if (_user == null)
                 {
                     OperationContext.Current.OperationCompleted += LogIn_Failed;
@@ -93,14 +92,18 @@ namespace Rine.ServiceLibrary
         [OperationBehavior]
         public void Receive(DateTime time)
         {
-            IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
-            foreach (Message message in _user.ChatLogs.Where(m => m.Time > time))
+            using (var messageDB = new MessageContext())
             {
-                channel.ReceiveChat(new MessageInfo
+                User user = messageDB.Users.AsNoTracking().First(u => u.Uid == _user.Uid);
+                IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
+                foreach (Message message in user.ChatLogs.Where(m => m.Time > time))
                 {
-                    Content = message.Content,
-                    SrcUid = message.SrcUid
-                });
+                    channel.ReceiveChat(new MessageInfo
+                    {
+                        Content = message.Content,
+                        SrcUid = message.SrcUid
+                    });
+                }
             }
         }
 
@@ -155,8 +158,8 @@ namespace Rine.ServiceLibrary
         {
             using (var messageDB = new MessageContext())
             {
-                messageDB.Users.Attach(_user);
-                messageDB.Users.Find(friend.Uid).Invitations.Add(_user);
+                User user = messageDB.Users.Find(_user.Uid);
+                messageDB.Users.Find(friend.Uid).Invitations.Add(user);
                 messageDB.SaveChanges();
                 if (usersOnline.TryGetValue(friend.Uid, out OperationContext operation))
                 {
@@ -174,8 +177,8 @@ namespace Rine.ServiceLibrary
         {
             using (var messageDB = new MessageContext())
             {
-                messageDB.Users.Attach(_user);
-                _user.FriendList.RemoveAll(f => f.Uid == uid);
+                User user = messageDB.Users.Find(_user.Uid);
+                user.FriendList.RemoveAll(f => f.Uid == uid);
                 messageDB.SaveChanges();
             }
         }
@@ -185,13 +188,13 @@ namespace Rine.ServiceLibrary
         {
             using (var messageDB = new MessageContext())
             {
-                messageDB.Users.Attach(_user);
-                _user.Invitations.RemoveAll(i => i.Uid == srcUid);
+                User user = messageDB.Users.Find(_user.Uid);
+                user.Invitations.RemoveAll(i => i.Uid == srcUid);
                 if (consentOrDecline)
                 {
                     User friend = messageDB.Users.Find(srcUid);
-                    friend.FriendList.Add(_user);
-                    _user.FriendList.Add(friend);
+                    friend.FriendList.Add(user);
+                    user.FriendList.Add(friend);
                     if (usersOnline.TryGetValue(srcUid, out OperationContext operation))
                     {
                         operation.GetCallbackChannel<IRineCallBack>().AddFriendSuccess(
@@ -209,28 +212,36 @@ namespace Rine.ServiceLibrary
         [OperationBehavior]
         public void GetInvitations()
         {
-            IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
-            foreach (var invitation in _user.Invitations)
+            using (var messageDB = new MessageContext())
             {
-                channel.AddFriendNotify(new FriendInfo
+                IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
+                User user = messageDB.Users.AsNoTracking().First(u => u.Uid == _user.Uid);
+                foreach (var invitation in user.Invitations)
                 {
-                    Uid = invitation.Uid,
-                    UserName = invitation.UserName
-                });
+                    channel.AddFriendNotify(new FriendInfo
+                    {
+                        Uid = invitation.Uid,
+                        UserName = invitation.UserName
+                    });
+                }
             }
         }
 
         [OperationBehavior]
         public void GetFriends()
         {
-            IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
-            foreach (var friend in _user.FriendList)
+            using (var messageDB = new MessageContext())
             {
-                channel.AddFriendSuccess(new FriendInfo
+                IRineCallBack channel = OperationContext.Current.GetCallbackChannel<IRineCallBack>();
+                User user = messageDB.Users.AsNoTracking().First(u => u.Uid == _user.Uid);
+                foreach (var friend in user.FriendList)
                 {
-                    Uid = friend.Uid,
-                    UserName = friend.UserName
-                });
+                    channel.AddFriendSuccess(new FriendInfo
+                    {
+                        Uid = friend.Uid,
+                        UserName = friend.UserName
+                    });
+                }
             }
         }
 

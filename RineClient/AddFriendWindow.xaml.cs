@@ -34,6 +34,8 @@ namespace RineClient
         {
             this.DialogResult = true;
             MessageBox.Show("您的好友申请已发出");
+            var button = sender as Button;
+            button.Command.Execute(button.CommandParameter);
             this.RineIDBox.Text = "";
         }
     }

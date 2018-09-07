@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -15,12 +16,12 @@ namespace Rine.ServiceLibrary
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.PerSession)]
     public class RineService : IRineService
     {
-        private static Dictionary<int, OperationContext> usersOnline;
+
+        private static ConcurrentDictionary<int, OperationContext> usersOnline = new ConcurrentDictionary<int, OperationContext>();
         private User _user;
 
         public RineService()
         {
-            usersOnline = new Dictionary<int, OperationContext>();
         }
 
         [OperationBehavior]
@@ -45,7 +46,8 @@ namespace Rine.ServiceLibrary
                     OperationContext.Current.OperationCompleted += LogIn_Failed;
                     return "此用户已登陆";
                 }
-                usersOnline.Add(_user.Uid, OperationContext.Current);
+                while (!usersOnline.TryAdd(_user.Uid, OperationContext.Current))
+                    continue;
                 OperationContext.Current.Channel.Closed += Channel_Closed;
                 OperationContext.Current.Channel.Faulted += Channel_Faulted;
                 foreach (var friend in usersOnline.Where(u => _user.FriendList.Any(f => f.Uid == u.Key)))
@@ -81,7 +83,8 @@ namespace Rine.ServiceLibrary
         {
             if (usersOnline.ContainsKey(_user.Uid))
             {
-                usersOnline.Remove(_user.Uid);
+                while (!usersOnline.TryRemove(_user.Uid, out OperationContext discard))
+                    continue;
                 foreach (var friend in usersOnline.Where(u => _user.FriendList.Any(f => f.Uid == u.Key)))
                 {
                     friend.Value.GetCallbackChannel<IRineCallBack>()?.LogOutNotify(_user.Uid);
@@ -136,12 +139,14 @@ namespace Rine.ServiceLibrary
                 User dstUser = messageDB.Users.Find(message.DstUid);
                 if (dstUser != null)
                 {
+                    message.SrcUid = _user.Uid;
+                    message.Time = DateTime.Now;
                     Message _message = new Message
                     {
                         Content = message.Content,
                         DstUid = message.DstUid,
-                        SrcUid = _user.Uid,
-                        Time = DateTime.Now,
+                        SrcUid = message.SrcUid,
+                        Time = message.Time
                     };
                     messageDB.Messages.Add(_message);
                     dstUser.ChatLogs.Add(_message);

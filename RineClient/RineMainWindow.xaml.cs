@@ -90,5 +90,23 @@ namespace RineClient
             }
             e.Handled = true;
         }
+
+        private void FriendList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (User currentFriend in e.AddedItems)
+            {
+                currentFriend.Messages.CollectionChanged += ScrollToBottom;
+            }
+            foreach (User currentFriend in e.RemovedItems)
+            {
+                currentFriend.Messages.CollectionChanged -= ScrollToBottom;
+            }
+        }
+
+        private void ScrollToBottom(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ChatLogs.Items.MoveCurrentToLast();
+            ChatLogs.ScrollIntoView(ChatLogs.Items.CurrentItem);
+        }
     }
 }   

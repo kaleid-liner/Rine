@@ -86,6 +86,7 @@
     <Compile Include="Message.cs" />
     <Compile Include="MessagesLabelConverter.cs" />
     <Compile Include="MessageStyleSelector.cs" />
+    <Compile Include="MessageTemplateSelector.cs" />
     <Compile Include="ObservableFriendCollection.cs" />
     <Compile Include="OnlineImageConverter.cs" />
     <Compile Include="RelayCommand.cs" />

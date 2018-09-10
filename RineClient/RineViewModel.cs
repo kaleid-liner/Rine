@@ -10,6 +10,7 @@ using Rine.ServiceContracts;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Windows;
+using System.ServiceModel;
 
 
 namespace RineClient
@@ -197,14 +198,14 @@ namespace RineClient
             Invitations.Add(inviter);
         }
 
-        public void AddFriendSuccess(FriendInfo friend)
+        public async void AddFriendSuccess(FriendInfo friend)
         {
             if (!FriendList.Any(f => f.RineID == friend.Uid))
             {
                 FriendList.Add(new User
                 {
                     Messages = new ObservableCollection<Message>(),
-                    Online = _client.GetFriendStatus(friend.Uid),
+                    Online = await Task.Run(() => _client.GetFriendStatus(friend.Uid)),
                     RineID = friend.Uid,
                     UserName = friend.UserName
                 });

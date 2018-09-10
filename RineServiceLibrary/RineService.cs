@@ -46,8 +46,7 @@ namespace Rine.ServiceLibrary
                     OperationContext.Current.OperationCompleted += LogIn_Failed;
                     return "此用户已登陆";
                 }
-                while (!usersOnline.TryAdd(_user.Uid, OperationContext.Current))
-                    continue;
+                usersOnline.TryAdd(_user.Uid, OperationContext.Current);
                 OperationContext.Current.Channel.Closed += Channel_Closed;
                 OperationContext.Current.Channel.Faulted += Channel_Faulted;
                 foreach (var friend in usersOnline.Where(u => _user.FriendList.Any(f => f.Uid == u.Key)))
@@ -83,8 +82,7 @@ namespace Rine.ServiceLibrary
         {
             if (usersOnline.ContainsKey(_user.Uid))
             {
-                while (!usersOnline.TryRemove(_user.Uid, out OperationContext discard))
-                    continue;
+                usersOnline.TryRemove(_user.Uid, out OperationContext discard);
                 foreach (var friend in usersOnline.Where(u => _user.FriendList.Any(f => f.Uid == u.Key)))
                 {
                     friend.Value.GetCallbackChannel<IRineCallBack>()?.LogOutNotify(_user.Uid);

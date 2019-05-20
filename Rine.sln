@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RineServer", "RineServer\RineServer.csproj", "{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RineServer", "RineServer\RineServer.csproj", "{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RineSignalRContracts", "RineSignalRContracts\RineSignalRContracts.csproj", "{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

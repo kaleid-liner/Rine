@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using RineServer.Models;
 
 namespace RineServer
 {
@@ -33,6 +35,11 @@ namespace RineServer
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddDbContext<RineServerContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("RineServerContext")));
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +61,12 @@ namespace RineServer
             app.UseCookiePolicy();
 
             app.UseMvc();
+
+            app.UseSignalR(route =>
+            {
+                route.MapHub<Hubs.ChatHub>("/chat");
+                route.MapHub<Hubs.AccountHub>("/account");
+            });
         }
     }
 }

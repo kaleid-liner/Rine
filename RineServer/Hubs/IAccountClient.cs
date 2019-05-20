@@ -8,8 +8,8 @@ namespace RineServer.Hubs
 {
     public interface IAccountClient
     {
-        Task Signin(UserInfo user);
-        Task Signup(UserInfo user);
-        Task Signout(UserInfo user);
+        Task OnSignin(UserInfo user);
+        Task OnSignup(UserInfo user);
+        Task OnSignout(UserInfo user);
     }
 }

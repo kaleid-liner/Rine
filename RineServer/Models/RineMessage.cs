@@ -16,5 +16,7 @@ namespace RineServer.Models
 
         public RineUser Sender { get; set; }
         public RineUser Receiver { get; set; }
+
+        public bool Received { get; set; }
     }
 }

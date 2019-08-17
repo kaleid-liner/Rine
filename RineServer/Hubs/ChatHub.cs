@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 using RineSignalRContracts;
 using System.Collections.Concurrent;
-using Microsoft.EntityFrameworkCore;
+using RineServer.Areas.Identity.Models;
 using RineServer.Models;
 
 namespace RineServer.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub<IChatClient>
     {
         private readonly static ConcurrentDictionary<string, HashSet<string>> _connections
@@ -25,8 +27,8 @@ namespace RineServer.Hubs
         public async Task SendMessage(MessageInfo mesg)
         {
             // don't use `mesg.Sender` to prevent forged messages
-            RineUser sender = _context.RineUser.First(u => u.Username == Context.User.Identity.Name);
-            RineUser receiver = _context.RineUser.First(u => u.Username == mesg.Receiver);
+            RineUser sender = _context.Users.First(u => u.Username == Context.User.Identity.Name);
+            RineUser receiver = _context.Users.First(u => u.Username == mesg.Receiver);
 
             if (sender != null && receiver != null)
             {
@@ -111,6 +113,39 @@ namespace RineServer.Hubs
                 }
                 await Task.WhenAll(tasks);
             }
+        }
+
+        //
+        public override Task OnConnectedAsync()
+        {
+            string name = Context.User.Identity.Name;
+
+            if (!_connections.TryGetValue(name, out var connections))
+            {
+                connections = new HashSet<string>();
+                _connections[name] = connections;
+            }
+
+            lock (connections)
+            {
+                connections.Add(Context.ConnectionId);
+            }
+
+            return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            string name = Context.User.Identity.Name;
+
+            _connections.TryGetValue(name, out var connections);
+
+            lock (connections)
+            {
+                connections.Remove(Context.ConnectionId);
+            }
+
+            return base.OnDisconnectedAsync(exception);
         }
 
     }

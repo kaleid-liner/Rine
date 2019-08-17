@@ -4,17 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RineServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using RineServer.Areas.Identity.Models;
 
 namespace RineServer.Models
 {
-    public class RineServerContext : DbContext
+    public class RineServerContext : IdentityDbContext<RineUser>
     {
         public RineServerContext (DbContextOptions<RineServerContext> options)
             : base(options)
         {
         }
-
-        public DbSet<RineServer.Models.RineUser> RineUser { get; set; }
 
         public DbSet<RineServer.Models.RineMessage> RineMessage { get; set; }
 
@@ -22,10 +22,6 @@ namespace RineServer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RineUser>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
             modelBuilder.Entity<RineMessage>()
                 .Property(m => m.Sent)
                 .ValueGeneratedOnAdd()
@@ -47,6 +43,5 @@ namespace RineServer.Models
                 .WithMany(u => u.FriendRecv)
                 .HasForeignKey(fs => fs.UserRecvId);
         }
-
     }
 }

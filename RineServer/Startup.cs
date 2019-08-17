@@ -65,7 +65,6 @@ namespace RineServer
             app.UseSignalR(route =>
             {
                 route.MapHub<Hubs.ChatHub>("/chat");
-                route.MapHub<Hubs.AccountHub>("/account");
             });
         }
     }

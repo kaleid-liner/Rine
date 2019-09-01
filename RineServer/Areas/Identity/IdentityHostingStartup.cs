@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RineServer.Models;
+using RineServer.Areas.Identity.Models;
 
 [assembly: HostingStartup(typeof(RineServer.Areas.Identity.IdentityHostingStartup))]
 namespace RineServer.Areas.Identity
@@ -15,11 +16,7 @@ namespace RineServer.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<RineServerContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("RineServerContextConnection")));
-
-                services.AddDefaultIdentity<IdentityUser>()
+                services.AddDefaultIdentity<RineUser>()
                     .AddEntityFrameworkStores<RineServerContext>();
             });
         }

@@ -12,13 +12,22 @@ namespace RineServer.Models
     {
         public int Id { get; set; }
         public RineUser UserRequest { get; set; }
-        public int UserRequestId { get; set; }
+        public string UserRequestId { get; set; }
         public RineUser UserRecv { get; set; }
-        public int UserRecvId { get; set; }
+        public string UserRecvId { get; set; }
+
+        public string Description { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
         public DateTime? Actioned { get; set; }
-        public bool? Accepted { get; set; }
+        public FriendshipStatus Status { get; set; }
+    }
+
+    public enum FriendshipStatus
+    {
+        Pending,
+        Denied,
+        Accepted,
     }
 }

@@ -22,6 +22,11 @@ namespace RineServer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<RineUser>()
+                .Property(m => m.Created)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("getdate()");
+
             modelBuilder.Entity<RineMessage>()
                 .Property(m => m.Sent)
                 .ValueGeneratedOnAdd()

@@ -8,8 +8,8 @@ namespace RineServer.Hubs
 {
     public interface IChatClient
     {
-        Task ReceiveMessage(MessageInfo mesg);
-        Task NotifyFriendRequests(UserInfo friend);
-        Task NotifyFriendAccepted(UserInfo friend);
+        Task ReceiveMessage(MessageRecv mesg);
+        Task NotifyFriendRequests(FriendRequestRecv friend);
+        Task NotifyNewFriend(FriendInfo friend);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using RineSignalRContracts;
 using System.Collections.Concurrent;
 using RineServer.Areas.Identity.Models;
@@ -14,9 +15,6 @@ namespace RineServer.Hubs
     [Authorize]
     public class ChatHub : Hub<IChatClient>
     {
-        private readonly static ConcurrentDictionary<string, HashSet<string>> _connections
-            = new ConcurrentDictionary<string, HashSet<string>>();
-
         private readonly RineServerContext _context;
 
         public ChatHub(RineServerContext context)
@@ -24,32 +22,31 @@ namespace RineServer.Hubs
             _context = context;
         }
 
-        public async Task SendMessage(MessageInfo mesg)
+        public async Task SendMessage(MessageSent mesg)
         {
             // don't use `mesg.Sender` to prevent forged messages
-            RineUser sender = _context.Users.First(u => u.Username == Context.User.Identity.Name);
-            RineUser receiver = _context.Users.First(u => u.Username == mesg.Receiver);
+            RineUser sender = _context.Users.First(u => u.UserName == Context.User.Identity.Name);
+            RineUser receiver = _context.Users.First(u => u.UserName == mesg.Receiver);
+
+            bool received = false;
+            DateTime now = DateTime.Now;
+
+            if (receiver.Status == UserStatus.Online || receiver.Status == UserStatus.Invisible)
+            {
+                await Clients.User(receiver.UserName).ReceiveMessage(new MessageRecv
+                {
+                    Content = mesg.Content,
+                    Sender = sender.UserName,
+                    Created = now,
+                });
+                received = true;
+            }
 
             if (sender != null && receiver != null)
             {
-                mesg.Sent = DateTime.Now;
-                bool received = false;
-
-                if (_connections.TryGetValue(mesg.Receiver, out var connections))
-                {
-                    var tasks = new List<Task>();
-                    foreach (var connId in connections)
-                    {
-                        tasks.Add(Clients.Client(connId).ReceiveMessage(mesg));
-                        received = true;
-                    }
-                    await Task.WhenAll(tasks);
-                }
-
                 _context.Add(new RineMessage
                 {
                     Content = mesg.Content,
-                    Sent = mesg.Sent,
                     Sender = sender,
                     Receiver = receiver,
                     Received = received
@@ -59,93 +56,93 @@ namespace RineServer.Hubs
             }
         }
 
-        public async Task AddFriend(UserInfo friend)
+        public async Task AddFriend(FriendRequestSent friend)
         {
-            RineUser newFriend = _context.RineUser.First(u => u.Username == friend.Username);
-            RineUser user = _context.RineUser.First(u => u.Username == Context.User.Identity.Name);
+            RineUser receiver = _context.Users.First(u => u.UserName == friend.Receiver);
+            RineUser sender = _context.Users.First(u => u.UserName == Context.User.Identity.Name);
 
-            if (user != null && newFriend != null)
+            DateTime now = DateTime.Now;
+
+            if (sender != null && receiver != null)
             {
+                await Clients.User(receiver.UserName).NotifyFriendRequests(new FriendRequestRecv
+                {
+                    Sender = sender.UserName,
+                    Created = now,
+                    Description = friend.Description,
+                });
+
                 var friendship = new Friendship
                 {
-                    UserRecvId = newFriend.Id,
-                    UserRequestId = user.Id,
-                    Accepted = false,
-                    Created = DateTime.Now
+                    UserRecvId = receiver.Id,
+                    UserRequestId = sender.Id,
+                    Description = friend.Description,
+                    Status = FriendshipStatus.Pending,
                 };
                 _context.Add(friendship);
-                user.FriendRequest.Append(friendship);
-                newFriend.FriendRecv.Append(friendship);
                 await _context.SaveChangesAsync();
-
-                friend.Username = Context.User.Identity.Name;
-                if (_connections.TryGetValue(friend.Username, out var connections))
-                {
-                    var tasks = new List<Task>();
-                    foreach (var connId in connections)
-                    {
-                        tasks.Add(Clients.Client(connId).NotifyFriendRequests(friend));
-                    }
-                    await Task.WhenAll(tasks);
-                }
             }
         }
 
-        public async Task AcceptFriend(UserInfo friend)
+        public async Task ActionFriendRequest(FriendRequestAction action)
         {
-            RineUser newFriend = _context.RineUser.First(u => u.Username == friend.Username);
-            RineUser user = _context.RineUser.First(u => u.Username == Context.User.Identity.Name);
-            Friendship friendship = user.FriendRecv.First(u => u.UserRecvId == user.Id);
+            RineUser sender = _context.Users.First(u => u.UserName == action.Sender);
+            RineUser receiver = _context.Users.First(u => u.UserName == Context.User.Identity.Name);
+            Friendship friendship = receiver.FriendRecv.First(u => u.UserRequestId == sender.Id);
 
-            if (user != null && newFriend != null && friendship != null)
+            if (receiver != null && sender != null && friendship != null)
             {
+                if (action.Accept)
+                {
+                    await Clients.User(sender.UserName).NotifyNewFriend(UserToFriendInfo(receiver));
+                    await Clients.User(receiver.UserName).NotifyNewFriend(UserToFriendInfo(sender));
+                }
+
                 friendship.Actioned = DateTime.Now;
-                friendship.Accepted = true;
+                friendship.Status = action.Accept
+                    ? FriendshipStatus.Accepted
+                    : FriendshipStatus.Denied;
+                await _context.SaveChangesAsync();
             }
 
-            friend.Username = newFriend.Username;
-            if (_connections.TryGetValue(friend.Username, out var connections))
-            {
-                var tasks = new List<Task>();
-                foreach (var connId in connections)
-                {
-                    tasks.Add(Clients.Client(connId).NotifyFriendAccepted(friend));
-                }
-                await Task.WhenAll(tasks);
-            }
         }
 
-        //
-        public override Task OnConnectedAsync()
+        public async override Task OnConnectedAsync()
         {
             string name = Context.User.Identity.Name;
 
-            if (!_connections.TryGetValue(name, out var connections))
-            {
-                connections = new HashSet<string>();
-                _connections[name] = connections;
-            }
+            RineUser user = _context.Users.First(u => u.UserName == name);
 
-            lock (connections)
-            {
-                connections.Add(Context.ConnectionId);
-            }
+            user.Status = UserStatus.Online;
+            await _context.SaveChangesAsync();
 
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public async override Task OnDisconnectedAsync(Exception exception)
         {
             string name = Context.User.Identity.Name;
 
-            _connections.TryGetValue(name, out var connections);
+            RineUser user = _context.Users.First(u => u.UserName == name);
 
-            lock (connections)
+            user.Status = UserStatus.Offline;
+            user.LastOnline = DateTime.Now;
+            await _context.SaveChangesAsync();
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        public static FriendInfo UserToFriendInfo(RineUser user)
+        {
+            return new FriendInfo
             {
-                connections.Remove(Context.ConnectionId);
-            }
-
-            return base.OnDisconnectedAsync(exception);
+                UserName = user.UserName,
+                Created = user.Created,
+                LastOnline = user.LastOnline,
+                Status = user.Status == UserStatus.Online
+                    ? FriendStatus.Online
+                    : FriendStatus.Offline,
+            };
         }
 
     }

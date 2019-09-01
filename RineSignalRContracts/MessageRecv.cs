@@ -4,11 +4,10 @@ using System.Text;
 
 namespace RineSignalRContracts
 {
-    public class MessageInfo
+    public class MessageRecv
     {
         public string Content { get; set; }
         public string Sender { get; set; }
-        public string Receiver { get; set; }
-        public DateTime Sent { get; set; }
+        public DateTime Created { get; set; }
     }
 }

@@ -65,13 +65,6 @@ namespace RineServer.Hubs
 
             if (sender != null && receiver != null)
             {
-                await Clients.User(receiver.UserName).NotifyFriendRequests(new FriendRequestRecv
-                {
-                    Sender = sender.UserName,
-                    Created = now,
-                    Description = friend.Description,
-                });
-
                 var friendship = new Friendship
                 {
                     UserRecvId = receiver.Id,
@@ -81,6 +74,14 @@ namespace RineServer.Hubs
                 };
                 _context.Add(friendship);
                 await _context.SaveChangesAsync();
+
+                await Clients.User(receiver.UserName).NotifyFriendRequests(new FriendRequestRecv
+                {
+                    Id = friendship.Id,
+                    Sender = sender.UserName,
+                    Created = now,
+                    Description = friend.Description,
+                });
             }
         }
 
@@ -88,9 +89,14 @@ namespace RineServer.Hubs
         {
             RineUser sender = _context.Users.First(u => u.UserName == action.Sender);
             RineUser receiver = _context.Users.First(u => u.UserName == Context.User.Identity.Name);
-            Friendship friendship = receiver.FriendRecv.First(u => u.UserRequestId == sender.Id);
+            Friendship friendship = _context.Friendship.Find(action.Id);
 
-            if (receiver != null && sender != null && friendship != null)
+            if (receiver != null 
+                && sender != null 
+                && friendship != null
+                && friendship.UserRecvId == receiver.Id
+                && friendship.UserRequestId == sender.Id
+                && friendship.Status == FriendshipStatus.Pending)
             {
                 if (action.Accept)
                 {
@@ -104,7 +110,6 @@ namespace RineServer.Hubs
                     : FriendshipStatus.Denied;
                 await _context.SaveChangesAsync();
             }
-
         }
 
         public async override Task OnConnectedAsync()
@@ -115,6 +120,10 @@ namespace RineServer.Hubs
 
             user.Status = UserStatus.Online;
             await _context.SaveChangesAsync();
+
+            var friendsOnline = (from f in _context.GetAllFriendsOnline(user)
+                                 select f.UserName).ToList();
+            await Clients.Users(friendsOnline).NotifyFriendStatus(UserToFriendInfo(user));
 
             await base.OnConnectedAsync();
         }
@@ -128,6 +137,10 @@ namespace RineServer.Hubs
             user.Status = UserStatus.Offline;
             user.LastOnline = DateTime.Now;
             await _context.SaveChangesAsync();
+
+            var friendsOnline = (from f in _context.GetAllFriendsOnline(user)
+                                 select f.UserName).ToList();
+            await Clients.Users(friendsOnline).NotifyFriendStatus(UserToFriendInfo(user));
 
             await base.OnDisconnectedAsync(exception);
         }

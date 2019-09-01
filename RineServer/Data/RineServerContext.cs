@@ -48,5 +48,22 @@ namespace RineServer.Models
                 .WithMany(u => u.FriendRecv)
                 .HasForeignKey(fs => fs.UserRecvId);
         }
+
+        public IEnumerable<RineUser> GetAllFriends(RineUser user)
+        {
+            return (from f in user.FriendRequest
+                    where f.Status == FriendshipStatus.Accepted
+                    select f.UserRecv).Concat(from f in user.FriendRecv
+                                              where f.Status == FriendshipStatus.Accepted
+                                              select f.UserRequest);
+                
+        }
+
+        public IEnumerable<RineUser> GetAllFriendsOnline(RineUser user)
+        {
+            return from f in GetAllFriends(user)
+                   where f.Status == UserStatus.Online
+                   select f;
+        }
     }
 }

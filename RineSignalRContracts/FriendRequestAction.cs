@@ -6,6 +6,7 @@ namespace RineSignalRContracts
 {
     public class FriendRequestAction
     {
+        public int Id { get; set; }
         public string Sender { get; set; }
         public bool Accept { get; set; }
     }

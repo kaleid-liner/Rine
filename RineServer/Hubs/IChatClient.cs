@@ -11,5 +11,6 @@ namespace RineServer.Hubs
         Task ReceiveMessage(MessageRecv mesg);
         Task NotifyFriendRequests(FriendRequestRecv friend);
         Task NotifyNewFriend(FriendInfo friend);
+        Task NotifyFriendStatus(FriendInfo friend);
     }
 }

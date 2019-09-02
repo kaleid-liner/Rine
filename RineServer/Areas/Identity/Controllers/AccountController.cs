@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RineServer.Areas.Identity.Models;
-using RineServer.Areas.Identity.ControllerModels;
+using RineSignalRContracts.ControllerModels;
 
 namespace RineServer.Areas.Identity.Controllers
 {

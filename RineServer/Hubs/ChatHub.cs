@@ -121,9 +121,12 @@ namespace RineServer.Hubs
             user.Status = UserStatus.Online;
             await _context.SaveChangesAsync();
 
-            var friendsOnline = (from f in _context.GetAllFriends(user)
+            var friendsOnline = (from f in _context.GetAllFriendsOnline(user)
                                  select f.UserName).ToList();
             await Clients.Users(friendsOnline).NotifyFriendStatus(UserToFriendInfo(user));
+
+            var tasks = _context.GetAllFriends(user).Select(f => Clients.User(name).NotifyFriendStatus(UserToFriendInfo(f)));
+            Task.WaitAll(tasks.ToArray());
 
             await base.OnConnectedAsync();
         }

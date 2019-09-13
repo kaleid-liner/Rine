@@ -51,10 +51,10 @@ namespace RineServer.Areas.Identity.Controllers
             var user = await _userManager.FindByNameAsync(userInfo.UserName);
             if (user == null)
             {
-                return Json(new
+                return Json(new TokenResult
                 {
-                    code = 1,
-                    messages = new List<string> { "no such user" },
+                    Code = 1,
+                    Messages = new List<string> { "no such user" },
                 });
             }
 
@@ -68,18 +68,18 @@ namespace RineServer.Areas.Identity.Controllers
                     principle.Claims,
                     expires: DateTime.UtcNow.AddDays(30),
                     signingCredentials: SigningCreds);
-                return Json(new
+                return Json(new TokenResult
                 {
-                    code = 0,
-                    token = _tokenHandler.WriteToken(token),
+                    Code = 0,
+                    Token = _tokenHandler.WriteToken(token),
                 });
             }
             else
             {
-                return Json(new
+                return Json(new TokenResult
                 {
-                    code = 2,
-                    messages = new List<string> { "Login failed" },
+                    Code = 2,
+                    Messages = new List<string> { "Login failed" },
                 });
             }
         }

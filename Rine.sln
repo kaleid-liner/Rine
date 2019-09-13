@@ -4,12 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RineServer", "RineServer\RineServer.csproj", "{D8C491C7-A3E2-4DC3-88A4-3B60AB4EC2C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{346A6371-48A4-46C7-BA74-DB919EF9955A} = {346A6371-48A4-46C7-BA74-DB919EF9955A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RineSignalRContracts", "RineSignalRContracts\RineSignalRContracts.csproj", "{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RineClient", "RineClient\RineClient.csproj", "{346A6371-48A4-46C7-BA74-DB919EF9955A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RineServerTests", "RineServer.Tests\RineServerTests\RineServerTests.csproj", "{F87E0EDB-57DF-493E-8343-A9EC014B527A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RineServerTests", "RineServer.Tests\RineServerTests\RineServerTests.csproj", "{F87E0EDB-57DF-493E-8343-A9EC014B527A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +69,8 @@ Global
 		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Release|x86.ActiveCfg = Release|Any CPU
 		{C5DC3DA4-E98D-47D0-86F5-87191A8B5CC0}.Release|x86.Build.0 = Release|Any CPU
 		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|Any CPU.Build.0 = Debug|x86
+		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|ARM.Build.0 = Debug|ARM
 		{346A6371-48A4-46C7-BA74-DB919EF9955A}.Debug|ARM.Deploy.0 = Debug|ARM

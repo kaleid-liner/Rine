@@ -179,7 +179,11 @@ namespace RineClient.ViewModels
                 SaveCredentialsToLocker(UserName, Password);
                 SaveSettings();
 
-                NavigationService.Navigate<MainViewModel>(User);
+                NavigationService.Navigate<MainViewModel>(new MainArgs
+                {
+                    User = User,
+                    ChatHub = ChatHub,
+                });
             }
         }
 

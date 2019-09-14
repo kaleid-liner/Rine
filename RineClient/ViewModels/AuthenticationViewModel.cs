@@ -19,7 +19,7 @@ namespace RineClient.ViewModels
         #region constructor
         public AuthenticationViewModel(INavigationService navigationService)
         {
-            _client.BaseAddress = new Uri(UriProvider.BaseUri);
+            _client.BaseAddress = new Uri(RineSettings.BaseUri);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -82,7 +82,7 @@ namespace RineClient.ViewModels
             if (token != null)
             {
                 ChatHub = new HubConnectionBuilder()
-                    .WithUrl(UriProvider.ChatHubUri, options =>
+                    .WithUrl(RineSettings.ChatHubUri, options =>
                     {
                     // Consider using GetTokenAsync()?
                     options.AccessTokenProvider = () => Task.FromResult(token);
@@ -109,7 +109,7 @@ namespace RineClient.ViewModels
 
         private async Task<string> GetTokenAsync()
         {
-            var response = await _client.PostAsJsonAsync(UriProvider.TokenUri, new UserLogin
+            var response = await _client.PostAsJsonAsync(RineSettings.TokenUri, new UserLogin
             {
                 UserName = UserName,
                 Password = Password,

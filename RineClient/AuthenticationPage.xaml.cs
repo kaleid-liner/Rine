@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using RineClient.ViewModels;
+using RineClient.Common;
 using RineClient.Services;
 
 namespace RineClient
@@ -10,7 +11,7 @@ namespace RineClient
         public AuthenticationPage()
         {
             InitializeComponent();
-            ViewModel = new AuthenticationViewModel(new NavigationService(Frame));
+            ViewModel = ServiceLocator.Current.GetService<AuthenticationViewModel>();
         }
 
         public AuthenticationViewModel ViewModel { get; set; }
@@ -18,12 +19,19 @@ namespace RineClient
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            InitializeNavigation();
 
             if (ViewModel.IsAutoLogin)
             {
                 ViewModel.Login();
             }
             
+        }
+
+        private void InitializeNavigation()
+        {
+            var navigationService = ServiceLocator.Current.GetService<INavigationService>();
+            navigationService.Initialize(Frame);
         }
     }
 }

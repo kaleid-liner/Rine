@@ -10,9 +10,11 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using RineClient.ViewModels;
+using RineClient.Services;
+using Windows.UI.Xaml.Navigation;
+using RineClient.Models;
+using RineClient.Common;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -26,8 +28,24 @@ namespace RineClient
         public MainPage()
         {
             this.InitializeComponent();
+
+            ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
         }
 
         public MainViewModel ViewModel { get; set; }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            InitializeNavigation();
+            
+            ViewModel.LoadAsync((MainArgs)e.Parameter);
+        }
+
+        private void InitializeNavigation()
+        {
+            var navigationService = ServiceLocator.Current.GetService<INavigationService>();
+            navigationService.Initialize(Frame);
+        }
     }
 }

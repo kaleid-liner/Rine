@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Controls;
 
 namespace RineClient.Services
 {
@@ -9,5 +10,7 @@ namespace RineClient.Services
         bool Navigate(Type viewModelType, object parameter = null);
 
         void GoBack();
+
+        void Initialize(Frame frame);
     }
 }

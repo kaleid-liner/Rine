@@ -60,6 +60,9 @@ namespace RineClient.Services
             return _frame.Navigate(viewModelType, parameter);
         }
 
-        
+        public void Initialize(Frame frame)
+        {
+            _frame = frame;
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace RineServer.Areas.Identity.Controllers
             {
                 return Json(new TokenResult
                 {
-                    Code = 1,
+                    ResultType = TokenResult.TokenResultType.NoSuchUser,
                     Messages = new List<string> { "no such user" },
                 });
             }
@@ -70,7 +70,7 @@ namespace RineServer.Areas.Identity.Controllers
                     signingCredentials: SigningCreds);
                 return Json(new TokenResult
                 {
-                    Code = 0,
+                    ResultType = TokenResult.TokenResultType.Success,
                     Token = _tokenHandler.WriteToken(token),
                 });
             }
@@ -78,7 +78,7 @@ namespace RineServer.Areas.Identity.Controllers
             {
                 return Json(new TokenResult
                 {
-                    Code = 2,
+                    ResultType = TokenResult.TokenResultType.Failed,
                     Messages = new List<string> { "Login failed" },
                 });
             }

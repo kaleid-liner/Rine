@@ -17,16 +17,12 @@ namespace RineClient.ViewModels
     public class AuthenticationViewModel : INotifyPropertyChanged
     {
         #region constructor
-        public AuthenticationViewModel(INavigationService navigationService)
+        public AuthenticationViewModel(INavigationService navigationService, IChatService chatService)
         {
-            _client.BaseAddress = new Uri(RineSettings.BaseUri);
-            _client.DefaultRequestHeaders.Accept.Clear();
-            _client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-
             _credentials = GetCredentialsFromLocker();
 
-            NavigationService = navigationService;
+            _navigationService = navigationService;
+            _chatService = chatService;
 
             LoadSettings();
         }
@@ -67,35 +63,20 @@ namespace RineClient.ViewModels
 
         public IEnumerable<string> Errors { get; set; }
 
-        public INavigationService NavigationService { get; }
         #endregion
 
         #region field
+        private IChatService _chatService { get; }
         private IReadOnlyList<Windows.Security.Credentials.PasswordCredential> _credentials;
-        private readonly HttpClient _client = new HttpClient();
+        private INavigationService _navigationService { get; }
         #endregion
 
         #region helper
         private async Task<RineUser> DoLoginAsync()
         {
-            var token = await GetTokenAsync();
-            if (token != null)
+            var result = await _chatService.LoginAsync(UserName, Password);
+            if (result.ResultType == LoginResult.LoginResultType.Success)
             {
-                ChatHub = new HubConnectionBuilder()
-                    .WithUrl(RineSettings.ChatHubUri, options =>
-                    {
-                    // Consider using GetTokenAsync()?
-                    options.AccessTokenProvider = () => Task.FromResult(token);
-                    })
-                    .Build();
-
-                // auto reconnect
-                ChatHub.Closed += async (error) =>
-                {
-                    await Task.Delay(new Random().Next(0, 5) * 1000);
-                    await ChatHub.StartAsync();
-                };
-
                 return new RineUser
                 {
                     UserName = UserName,
@@ -103,28 +84,7 @@ namespace RineClient.ViewModels
             }
             else
             {
-                return null;
-            }
-        }
-
-        private async Task<string> GetTokenAsync()
-        {
-            var response = await _client.PostAsJsonAsync(RineSettings.TokenUri, new UserLogin
-            {
-                UserName = UserName,
-                Password = Password,
-            });
-
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadAsAsync<TokenResult>();
-            if (result.Code == 0)
-            {
-                return result.Token;
-            }
-            else
-            {
-                Errors = result.Messages;
+                Errors = result.Errors;
                 return null;
             }
         }
@@ -179,7 +139,7 @@ namespace RineClient.ViewModels
                 SaveCredentialsToLocker(UserName, Password);
                 SaveSettings();
 
-                NavigationService.Navigate<MainViewModel>(new MainArgs
+                _navigationService.Navigate<MainViewModel>(new MainArgs
                 {
                     User = User,
                     ChatHub = ChatHub,

@@ -8,18 +8,22 @@ namespace RineClient.ViewModels
     public class MainViewModel
     {
         #region constructor
-        public MainViewModel(INavigationService navigationService)
+        public MainViewModel(INavigationService navigationService, ChatService chatService)
         {
-            NavigationService = navigationService;
+            _navigationService = navigationService;
+            _chatService = chatService;
         }
         #endregion
 
         #region property
-        public INavigationService NavigationService { get; }
-
         public RineUser User { get; set; }
 
         public HubConnection ChatHub { get; set; }
+        #endregion
+
+        #region field
+        private INavigationService _navigationService;
+        private IChatService _chatService;
         #endregion
 
         #region method

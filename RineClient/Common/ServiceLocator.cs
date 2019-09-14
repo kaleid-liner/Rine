@@ -30,10 +30,13 @@ namespace RineClient.Common
 
         static public void Configure(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<IChatService, ChatService>();
+
             serviceCollection.AddScoped<INavigationService, NavigationService>();
 
             serviceCollection.AddTransient<AuthenticationViewModel>();
             serviceCollection.AddTransient<MainViewModel>();
+
 
             _rootServiceProvider = serviceCollection.BuildServiceProvider();
         }

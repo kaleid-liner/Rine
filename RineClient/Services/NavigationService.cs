@@ -12,14 +12,9 @@ namespace RineClient.Services
     {
         private static readonly ConcurrentDictionary<Type, Type> _viewModelViewPairs = new ConcurrentDictionary<Type, Type>();
 
-        public NavigationService(Frame frame)
-        {
-            _frame = frame;
-        }
-
         static public void Register<TViewModel, TView>() where TView: Page
         {
-            if (_viewModelViewPairs.TryAdd(typeof(TViewModel), typeof(TView)))
+            if (!_viewModelViewPairs.TryAdd(typeof(TViewModel), typeof(TView)))
             {
                 throw new InvalidOperationException($"ViewModel already registered '{typeof(TViewModel).FullName}'");
             }

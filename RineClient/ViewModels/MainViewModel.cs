@@ -17,8 +17,6 @@ namespace RineClient.ViewModels
 
         #region property
         public RineUser User { get; set; }
-
-        public HubConnection ChatHub { get; set; }
         #endregion
 
         #region field
@@ -30,7 +28,6 @@ namespace RineClient.ViewModels
         public Task LoadAsync(MainArgs args)
         {
             User = args.User;
-            ChatHub = args.ChatHub;
 
             return Task.CompletedTask;
         }

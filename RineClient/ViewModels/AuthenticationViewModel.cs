@@ -142,7 +142,6 @@ namespace RineClient.ViewModels
                 _navigationService.Navigate<MainViewModel>(new MainArgs
                 {
                     User = User,
-                    ChatHub = ChatHub,
                 });
             }
         }

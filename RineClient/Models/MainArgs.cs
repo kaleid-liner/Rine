@@ -10,7 +10,5 @@ namespace RineClient.Models
     public class MainArgs
     {
         public RineUser User { get; set; }
-
-        public HubConnection ChatHub { get; set; }
     }
 }

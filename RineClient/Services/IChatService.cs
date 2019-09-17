@@ -6,5 +6,6 @@ namespace RineClient.Services
     public interface IChatService
     {
         Task<LoginResult> LoginAsync(string userName, string password);
+        Task LogoutAsync();
     }
 }

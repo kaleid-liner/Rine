@@ -70,5 +70,10 @@ namespace RineClient.Services
 
             return await response.Content.ReadAsAsync<TokenResult>();
         }
+
+        public async Task LogoutAsync()
+        {
+            await ChatHub.StopAsync();
+        }
     }
 }

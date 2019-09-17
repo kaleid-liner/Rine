@@ -15,6 +15,7 @@ using RineClient.Services;
 using Windows.UI.Xaml.Navigation;
 using RineClient.Models;
 using RineClient.Common;
+using Windows.ApplicationModel.Core;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -29,7 +30,20 @@ namespace RineClient
         {
             this.InitializeComponent();
 
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            Window.Current.SetTitleBar(RineTitleBar);
+
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+
             ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
+        }
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
+        {
+            LeftPaddingColumn.Width = new GridLength(sender.SystemOverlayLeftInset);
+            RightPaddingColumn.Width = new GridLength(sender.SystemOverlayRightInset);
+            Avatar.Margin = new Thickness(0, 0, sender.SystemOverlayRightInset, 0);
         }
 
         public MainViewModel ViewModel { get; set; }

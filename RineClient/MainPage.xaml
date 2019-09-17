@@ -5,10 +5,48 @@
     xmlns:local="using:RineClient"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:RineClient.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="RineTitleBar" Background="Transparent" Height="50"
+              Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Orientation="Horizontal" x:Name="Avatar"
+                    Grid.Column="2">
+            <PersonPicture DisplayName="kaleid-liner" Initials="KL" 
+                           ProfilePicture="/Assets/avatar.jpg"
+                           Width="40"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Button Style="{StaticResource PaneToggleButtonStyle}" Margin="10, 0, 10, 0"
+                    Click="{x:Bind ViewModel.OnPaneToggleButtonClick}"/>
+            <AutoSuggestBox PlaceholderText="Search" QueryIcon="Find"
+                            Width="200" VerticalAlignment="Center"/>
+        </StackPanel>
+        
+        <SplitView x:Name="MainSplitView"
+                   Grid.RowSpan="2" Grid.ColumnSpan="2"
+                   IsPaneOpen="{x:Bind ViewModel.IsMainSplitViewOpen, Mode=TwoWay}">
+            <SplitView.Pane>
+                <controls:AccountOperationControl User="{x:Bind ViewModel.User}" ItemClickCommand="{x:Bind ViewModel.AccountItemClickCommand}"/>
+            </SplitView.Pane>
+        </SplitView>
 
     </Grid>
 </Page>

@@ -126,6 +126,9 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\RineSettings.cs" />
     <Compile Include="Common\ServiceLocator.cs" />
+    <Compile Include="Controls\AccountOperationControl.xaml.cs">
+      <DependentUpon>AccountOperationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NamePasswordControl.xaml.cs">
       <DependentUpon>NamePasswordControl.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,7 @@
     <None Include="RineClient_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\avatar.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -166,6 +170,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AuthenticationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AccountOperationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

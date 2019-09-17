@@ -46,5 +46,9 @@ namespace RineClient.Common
         {
             get => (string)Current.SetDefault("ChatHubUri", "/chathub");
         }
+
+        public static string Version => "1.0.0";
+
+        public static string AppName => "Rine UWP";
     }
 }

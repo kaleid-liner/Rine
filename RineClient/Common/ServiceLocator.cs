@@ -36,6 +36,7 @@ namespace RineClient.Common
 
             serviceCollection.AddTransient<AuthenticationViewModel>();
             serviceCollection.AddTransient<MainViewModel>();
+            serviceCollection.AddTransient<FriendListViewModel>();
 
 
             _rootServiceProvider = serviceCollection.BuildServiceProvider();

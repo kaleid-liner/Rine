@@ -14,16 +14,17 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <PersonPicture ProfilePicture="{x:Bind Friend.Avatar, Mode=OneWay}" Height="80"
+        <PersonPicture ProfilePicture="{x:Bind Friend.Avatar, Mode=OneWay}" Height="60"
                        DisplayName="{x:Bind Friend.UserName, Mode=OneWay}"/>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock FontWeight="Bold" Text="{x:Bind Friend.UserName, Mode=OneWay}"/>
-            <TextBlock Grid.Row="1" Text="{x:Bind Friend.LatestMessage.Content, Mode=OneWay}"/>
-            <TextBlock Text="{x:Bind Friend.LatestTime, Mode=OneWay}" HorizontalAlignment="Right"/>
+            <TextBlock FontWeight="Bold" Text="{x:Bind Friend.UserName, Mode=OneWay}" VerticalAlignment="Center" Margin="10, 0"/>
+            <TextBlock Grid.Row="1" Text="{x:Bind Friend.LatestMessage.Content, Mode=OneWay}" VerticalAlignment="Center" Margin="10, 0"/>
+            <TextBlock FontWeight="Light" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Text="{x:Bind Friend.LatestTime, Mode=OneWay, Converter={StaticResource SmartDateTimeConverter}}"/>
             <local:Badge Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"
                          BadgeStyle="Accent" Visibility="{x:Bind Friend.AnyUnread, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" 
                          Text="{x:Bind Friend.UnreadCount, Mode=OneWay, Converter={StaticResource BadgeNumberConverter}}"/>

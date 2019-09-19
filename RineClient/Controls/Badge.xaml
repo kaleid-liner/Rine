@@ -17,7 +17,7 @@
         <Color x:Key="BadgeSuccessColor">#28A745</Color>
         <Color x:Key="BadgeWarningColor">#FFC107</Color>
         <x:Double x:Key="BadgeRadiusX">8</x:Double>
-        <x:Double x:Key="BadgeRadiusY">4</x:Double>
+        <x:Double x:Key="BadgeRadiusY">8</x:Double>
 
     </UserControl.Resources>
 
@@ -43,7 +43,7 @@
         </Rectangle>
 
         <TextBlock Text="{x:Bind Text, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                   Foreground="White" FontWeight="Bold" Padding="5, 0, 5, 0"/>
+                   Foreground="White" FontWeight="Bold" Padding="10, 0, 10, 0"/>
 
     </Grid>
 </UserControl>

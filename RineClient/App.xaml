@@ -8,6 +8,7 @@
         <converter:VisibilityConverter x:Key="VisibilityConverter"/>
         <converter:BadgeNumberConverter x:Key="BadgeNumberConverter"/>
         <converter:EnumConverter x:Key="EnumConverter"/>
+        <converter:SmartDateTimeConverter x:Key="SmartDateTimeConverter"/>
     </Application.Resources>
 
 </Application>

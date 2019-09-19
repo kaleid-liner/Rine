@@ -1,0 +1,47 @@
+﻿<UserControl
+    x:Class="RineClient.Controls.FriendInListControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RineClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="80"
+    d:DesignWidth="260">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <PersonPicture ProfilePicture="{x:Bind Friend.Avatar, Mode=OneWay}" Height="80"
+                       DisplayName="{x:Bind Friend.UserName, Mode=OneWay}"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock FontWeight="Bold" Text="{x:Bind Friend.UserName, Mode=OneWay}"/>
+            <TextBlock Grid.Row="1" Text="{x:Bind Friend.LatestMessage.Content, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind Friend.LatestTime, Mode=OneWay}" HorizontalAlignment="Right"/>
+            <local:Badge Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"
+                         BadgeStyle="Accent" Visibility="{x:Bind Friend.AnyUnread, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" 
+                         Text="{x:Bind Friend.UnreadCount, Mode=OneWay, Converter={StaticResource BadgeNumberConverter}}"/>
+        </Grid>
+
+        <Grid.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem Text="View profile">
+                    <MenuFlyoutItem.Icon>
+                        <SymbolIcon Symbol="ContactInfo"/>
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Delete">
+                    <MenuFlyoutItem.Icon>
+                        <SymbolIcon Symbol="Delete"/>
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+            </MenuFlyout>
+        </Grid.ContextFlyout>
+    </Grid>
+</UserControl>

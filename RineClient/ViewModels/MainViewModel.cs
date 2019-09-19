@@ -13,10 +13,11 @@ namespace RineClient.ViewModels
     public class MainViewModel: INotifyPropertyChanged
     {
         #region constructor
-        public MainViewModel(INavigationService navigationService, IChatService chatService)
+        public MainViewModel(INavigationService navigationService, IChatService chatService, FriendListViewModel friendList)
         {
             _navigationService = navigationService;
             _chatService = chatService;
+            FriendList = friendList;
         }
         #endregion
 
@@ -32,6 +33,8 @@ namespace RineClient.ViewModels
                 OnPropertyChanged(nameof(IsMainSplitViewOpen));
             }
         }
+
+        public FriendListViewModel FriendList { get; set; }
         #endregion
 
         #region field
@@ -44,6 +47,7 @@ namespace RineClient.ViewModels
         public Task LoadAsync(MainArgs args)
         {
             User = args.User;
+            FriendList.LoadAsync(args);
 
             return Task.CompletedTask;
         }

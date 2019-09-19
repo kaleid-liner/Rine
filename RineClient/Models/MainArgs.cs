@@ -10,5 +10,7 @@ namespace RineClient.Models
     public class MainArgs
     {
         public RineUser User { get; set; }
+
+        public IEnumerable<Friend> Friends { get; set; }
     }
 }

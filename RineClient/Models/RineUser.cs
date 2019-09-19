@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
+using RineClient.Common;
 
 namespace RineClient.Models
 {

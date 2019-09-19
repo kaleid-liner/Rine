@@ -6,8 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:RineClient.Controls"
+    xmlns:models="using:RineClient.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -39,14 +43,18 @@
             <AutoSuggestBox PlaceholderText="Search" QueryIcon="Find"
                             Width="200" VerticalAlignment="Center"/>
         </StackPanel>
-        
+
+        <controls:FriendListControl Grid.Row="1"
+                                    ViewModel="{x:Bind ViewModel.FriendList}"/>
+
         <SplitView x:Name="MainSplitView"
-                   Grid.RowSpan="2" Grid.ColumnSpan="2"
+                   Grid.RowSpan="2" Grid.ColumnSpan="2" Canvas.ZIndex="1"
                    IsPaneOpen="{x:Bind ViewModel.IsMainSplitViewOpen, Mode=TwoWay}">
             <SplitView.Pane>
                 <controls:AccountOperationControl User="{x:Bind ViewModel.User}" ItemClickCommand="{x:Bind ViewModel.AccountItemClickCommand}"/>
             </SplitView.Pane>
         </SplitView>
+
 
     </Grid>
 </Page>

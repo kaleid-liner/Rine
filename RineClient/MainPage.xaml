@@ -55,6 +55,9 @@
             </SplitView.Pane>
         </SplitView>
 
+        <controls:MessageInputControl Grid.Row="1" Grid.Column="1"
+                                      VerticalAlignment="Bottom"
+                                      Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"/>
 
     </Grid>
 </Page>

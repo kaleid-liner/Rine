@@ -139,6 +139,9 @@
     <Compile Include="Controls\FriendListControl.xaml.cs">
       <DependentUpon>FriendListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MessageInputControl.xaml.cs">
+      <DependentUpon>MessageInputControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NamePasswordControl.xaml.cs">
       <DependentUpon>NamePasswordControl.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FriendListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MessageInputControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
